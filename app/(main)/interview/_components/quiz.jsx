@@ -99,7 +99,7 @@ export default function Quiz() {
 
   if (!quizData) {
     return (
-      <Card className="mx-2">
+      <Card className="mx-2 bg-muted/50">
         <CardHeader>
           <CardTitle>Ready to test your knowledge?</CardTitle>
         </CardHeader>
@@ -121,7 +121,7 @@ export default function Quiz() {
   const question = quizData[currentQuestion];
 
   return (
-    <Card className="mx-2">
+    <Card className="mx-2 bg-muted/50">
       <CardHeader>
         <CardTitle>
           Question {currentQuestion + 1} of {quizData.length}

@@ -59,10 +59,21 @@ const DashboardView = ({insights}) => {
     <Badge variant="outline">Last updated: {lastUpdatedDate}</Badge>
    </div>
     {/* Market Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 ">
+        <Card
+                        className="
+                          h-full
+                          min-h-[260px]
+                          bg-red
+                          border-3xl border-gray-800
+                          hover:border-primary
+                          transition-all
+                          duration-300
+                          rounded-2xl
+                        "
+                      >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="text-2xl font-medium">
               Market Outlook
             </CardTitle>
             <OutlookIcon className={`h-4 w-4 ${outlookColor}`} />
@@ -75,9 +86,20 @@ const DashboardView = ({insights}) => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card
+                        className="
+                          h-full
+                          min-h-[260px]
+                          bg-red
+                          border-3xl border-gray-800
+                          hover:border-primary
+                          transition-all
+                          duration-300
+                          rounded-2xl
+                        "
+                      >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="text-2xl font-medium">
               Industry Growth
             </CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
@@ -90,9 +112,20 @@ const DashboardView = ({insights}) => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card
+                        className="
+                          h-full
+                          min-h-[260px]
+                          bg-red
+                          border-3xl border-gray-800
+                          hover:border-primary
+                          transition-all
+                          duration-300
+                          rounded-2xl
+                        "
+                      >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Demand Level</CardTitle>
+            <CardTitle className="text-2xl font-medium">Demand Level</CardTitle>
             <BriefcaseIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -105,13 +138,24 @@ const DashboardView = ({insights}) => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card
+                        className="
+                          h-full
+                          min-h-[260px]
+                          bg-red
+                          border-3xl border-gray-800
+                          hover:border-primary
+                          transition-all
+                          duration-300
+                          rounded-2xl
+                        "
+                      >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Top Skills</CardTitle>
+            <CardTitle className="text-2xl font-medium">Top Skills</CardTitle>
             <Brain className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="flex flex-wrap gap-1">
+            <div className="flex text-xl flex-wrap gap-1">
               {insights.topSkills.map((skill) => (
                 <Badge key={skill} variant="secondary">
                   {skill}
@@ -123,9 +167,16 @@ const DashboardView = ({insights}) => {
       </div>
 
       {/* Salary Ranges Chart */}
-      <Card className="col-span-4">
+      <Card className="col-span-4 h-full
+                          min-h-[260px]
+                          bg-red
+                          border-3xl border-gray-800
+                          hover:border-primary
+                          transition-all
+                          duration-300
+                          rounded-2xl">
         <CardHeader>
-          <CardTitle>Salary Ranges by Role</CardTitle>
+          <CardTitle className="text-3xl font-medium">Salary Ranges by Role</CardTitle>
           <CardDescription>
             Displaying minimum, median, and maximum salaries (in thousands)
           </CardDescription>
@@ -154,9 +205,9 @@ const DashboardView = ({insights}) => {
                     return null;
                   }}
                 />
-                <Bar dataKey="min" fill="#94a3b8" name="Min Salary (K)" />
-                <Bar dataKey="median" fill="#64748b" name="Median Salary (K)" />
-                <Bar dataKey="max" fill="#475569" name="Max Salary (K)" />
+                <Bar dataKey="min" fill="#ADB5BD" name="Min Salary (K)" />
+                <Bar dataKey="median" fill="#6C757D" name="Median Salary (K)" />
+                <Bar dataKey="max" fill="#495057" name="Max Salary (K)" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -165,9 +216,20 @@ const DashboardView = ({insights}) => {
 
       {/* Industry Trends */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card>
+        <Card
+                        className="
+                          h-full
+                          min-h-[260px]
+                          bg-red
+                          border-3xl border-gray-800
+                          hover:border-primary
+                          transition-all
+                          duration-300
+                          rounded-2xl
+                        "
+                      >
           <CardHeader>
-            <CardTitle>Key Industry Trends</CardTitle>
+            <CardTitle className="text-2xl font-medium">Key Industry Trends</CardTitle>
             <CardDescription>
               Current trends shaping the industry
             </CardDescription>
@@ -184,9 +246,20 @@ const DashboardView = ({insights}) => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card
+                        className="
+                          h-full
+                          min-h-[260px]
+                          bg-red
+                          border-3xl border-gray-800
+                          hover:border-primary
+                          transition-all
+                          duration-300
+                          rounded-2xl
+                        "
+                      >
           <CardHeader>
-            <CardTitle>Recommended Skills</CardTitle>
+            <CardTitle className="text-2xl font-medium">Recommended Skills</CardTitle>
             <CardDescription>Skills to consider developing</CardDescription>
           </CardHeader>
           <CardContent>

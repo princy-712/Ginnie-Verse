@@ -60,7 +60,7 @@ useEffect(() => {
 
   return (
     <div className="space-y-6">
-      <Card>
+      <Card className="bg-transparent">
         <CardHeader>
           <CardTitle>Job Details</CardTitle>
           <CardDescription>

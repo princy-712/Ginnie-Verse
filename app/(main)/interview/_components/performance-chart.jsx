@@ -36,7 +36,7 @@ export default function PerformanceChart({ assessments }) {
 
 
   return (
-    <Card>
+    <Card className="bg-transparent">
       <CardHeader>
         <CardTitle className="gradient-title text-3xl md:text-4xl">
           Performance Trend

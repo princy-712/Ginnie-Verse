@@ -85,7 +85,7 @@ const Header = async() => {
         </SignedOut>
         <SignedIn>
           <UserButton
-apparence={{elements:{
+appearance={{elements:{
     avtarBox:'w-10 h-10',
     userButtonPopoverCard: "shadow-xl",
     userPreviewMainIdentifier: "font-semibold"
