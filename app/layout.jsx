@@ -15,7 +15,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider appearance={{baseTheme:"dark"}}>
+    <ClerkProvider appearance={{baseTheme:dark}}>
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${inter.className} bg-[#030014] overflow-y-scroll overflow-x-hidden`}
@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
             <Toaster richColors />
              {/*Footer*/}
              <footer className="bg-muted/50 py-12 ">
-              <div className="container mx-auto px-4 text-center text-grey-200">
+              <div className="container mx-auto px-4 text-center text-gray-200">
                 <p>
                   Made with ❤️ by Princy
                 </p>
