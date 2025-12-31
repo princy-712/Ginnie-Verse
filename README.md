@@ -1,5 +1,7 @@
 # 🚀 Ginieverse – AI-Powered Career & Industry Insights Platform
 
+🔗 **Live Demo:** https://ginnie-verse-git-master-princy-sahus-projects.vercel.app
+
 Ginieverse is a full-stack AI-driven career development platform designed to help users understand their industry, build professional resumes and cover letters, and prepare for interviews through intelligent tools and insights.
 
 ---
