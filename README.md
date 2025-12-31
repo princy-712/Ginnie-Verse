@@ -163,7 +163,6 @@ npm run dev
 ## Industry Insights
 <img width="1463" height="496" alt="Screenshot 2025-12-31 at 6 01 01 PM" src="https://github.com/user-attachments/assets/b29b89b9-2e79-4ab5-acc9-d3d40c345066" />
 <img width="1469" height="653" alt="Screenshot 2025-12-31 at 6 01 40 PM" src="https://github.com/user-attachments/assets/cb31ce94-0d55-496d-b399-2226ebbc8b29" />
-<img width="1470" height="4<img width="1470" height="819" alt="Screenshot 2025-12-31 at 6 03 28 PM" src="https://github.com/user-attachments/assets/799237e3-ad84-45ac-82a4-61e5312c8972" />
 <img width="1470" height="479" alt="Screenshot 2025-12-31 at 6 02 46 PM" src="https://github.com/user-attachments/assets/a85b7d39-f7a1-466a-9ae4-592d2c3e32f4" />
 
 ## AI Resume Builder
