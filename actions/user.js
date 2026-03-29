@@ -8,33 +8,49 @@ export async function updateUser(data) {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
-  const user = await db.user.findUnique({
+  // Get user data from Clerk to get email and name
+  const { firstName, lastName, primaryEmailAddress } = await auth();
+  
+  let user = await db.user.findUnique({
     where: { clerkUserId: userId },
   });
 
-  if (!user) throw new Error("User not found");
+  if (!user) {
+    // User doesn't exist, create them first
+    console.log(`Creating new user ${userId} from Clerk`);
+    user = await db.user.create({
+      data: {
+        clerkUserId: userId,
+        email: primaryEmailAddress?.emailAddress || `${userId}@placeholder.com`,
+        name: `${firstName || ''} ${lastName || ''}`.trim() || 'User',
+      },
+    });
+    console.log(`Created user with ID: ${user.id}`);
+  }
 
   try {
     // ✅ Wrap the full logic inside the transaction
     const result = await db.$transaction(async (tx) => {
-      // 1️⃣ Check if industry exists
+      // 1️⃣ Check if industry insights exist
       let industryInsights = await tx.industryInsights.findUnique({
         where: {
           industry: data.industry,
         },
       });
 
-      // 2️⃣ If industry doesn't exist, create it with default values
+      // 2️⃣ If industry insights don't exist, create them
       if (!industryInsights) {
            const insights = await generateAIInsights(data.industry);
         
-          industryInsights = await db.industryInsights.create({
+          industryInsights = await tx.industryInsights.create({
               data: {
                 industry: data.industry,
                 ...insights,
                 nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
               },
             });
+      } else {
+        console.log(`Using existing industry insights for ${data.industry}`);
       }
 
       // 3️⃣ Update the user
@@ -69,12 +85,6 @@ export async function getUserOnboardingStatus() {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
-  const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
-  });
-
-  if (!user) throw new Error("User not found");
-
   try {
     const user = await db.user.findUnique({
       where: {
@@ -85,8 +95,17 @@ export async function getUserOnboardingStatus() {
       },
     });
 
+    if (!user) {
+      // User doesn't exist in database, need to create them
+      // This can happen after database cleanup
+      console.log(`User ${userId} not found in database, treating as not onboarded`);
+      return {
+        isOnboarded: false,
+      };
+    }
+
     return {
-      isOnboarded: !!user?.industry,
+      isOnboarded: !!user.industry,
     };
   } catch (error) {
     console.error("Error checking onboarding status:", error);

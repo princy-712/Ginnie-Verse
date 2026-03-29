@@ -33,16 +33,7 @@ export default function TestimonialsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.15 }}
               viewport={{ once: true }}
-              className="
-                relative
-                rounded-xl
-                p-6
-                bg-[#0b0b1f]
-                border
-                border-purple-500/10
-                hover:border-purple-500/40
-                transition
-              "
+              className="relative rounded-xl p-6 bg-[#0b0b1f] border border-purple-500/10 hover:border-purple-500/40 transition"
             >
               {/* Glow */}
               <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-500/10 to-cyan-500/10 blur-xl opacity-0 hover:opacity-100 transition" />

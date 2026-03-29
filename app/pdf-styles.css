@@ -1,0 +1,158 @@
+/* PDF-safe styles - using only RGB/HEX colors that work in PDF generation */
+
+:root {
+  --radius: 0.625rem;
+  /* Convert oklch to RGB equivalents */
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+  --card: #ffffff;
+  --card-foreground: #1a1a1a;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a1a;
+  --primary: #333333;
+  --primary-foreground: #fafafa;
+  --secondary: #f7f7f7;
+  --secondary-foreground: #333333;
+  --muted: #f7f7f7;
+  --muted-foreground: #6b7280;
+  --accent: #f7f7f7;
+  --accent-foreground: #333333;
+  --destructive: #dc2626;
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: #6b7280;
+  --chart-1: #8884d8;
+  --chart-2: #82ca9d;
+  --chart-3: #ffc658;
+  --chart-4: #ff7c7c;
+  --chart-5: #8dd1e1;
+}
+
+.dark {
+  --background: #1a1a1a;
+  --foreground: #fafafa;
+  --card: #262626;
+  --card-foreground: #fafafa;
+  --popover: #262626;
+  --popover-foreground: #fafafa;
+  --primary: #e5e5e5;
+  --primary-foreground: #262626;
+  --secondary: #404040;
+  --secondary-foreground: #fafafa;
+  --muted: #404040;
+  --muted-foreground: #a3a3a3;
+  --accent: #404040;
+  --accent-foreground: #fafafa;
+  --destructive: #ef4444;
+  --border: #404040;
+  --input: #404040;
+  --ring: #a3a3a3;
+  --chart-1: #8884d8;
+  --chart-2: #82ca9d;
+  --chart-3: #ffc658;
+  --chart-4: #ff7c7c;
+  --chart-5: #8dd1e1;
+}
+
+/* PDF-safe base styles */
+* {
+  border-color: var(--border);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  margin: 0;
+  padding: 20px;
+  line-height: 1.6;
+}
+
+/* Common resume styles */
+.resume-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.resume-name {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.resume-contact {
+  color: var(--muted-foreground);
+  margin: 0.5rem 0;
+}
+
+.resume-section {
+  margin-bottom: 2rem;
+}
+
+.resume-section-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--foreground);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.resume-item {
+  margin-bottom: 1rem;
+}
+
+.resume-item-title {
+  font-weight: bold;
+  color: var(--foreground);
+}
+
+.resume-item-subtitle {
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+
+.resume-item-date {
+  color: var(--muted-foreground);
+  float: right;
+}
+
+.resume-item-description {
+  margin-top: 0.5rem;
+  color: var(--foreground);
+}
+
+/* Skills and other lists */
+.resume-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.skill-tag {
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+}
+
+/* Print-specific styles */
+@media print {
+  body {
+    padding: 0;
+    font-size: 12pt;
+  }
+  
+  .resume-section {
+    page-break-inside: avoid;
+  }
+  
+  .resume-item {
+    page-break-inside: avoid;
+  }
+}

@@ -117,24 +117,221 @@ export default function ResumeBuilder({ initialContent }) {
  const generatePDF = async () => {
   setIsGenerating(true);
   try {
-    // dynamically import only on client
-    const html2pdf = (await import("html2pdf.js")).default;
+    console.log("Starting PDF generation...");
     
-    const element = document.getElementById("resume-pdf");
-    const opt = {
-      margin: [15, 15],
-      filename: "resume.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+    // Method 1: Try print to PDF (most reliable)
+    const markdownContent = previewContent || "";
+    
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <title>Resume</title>
+        <style>
+          @page {
+            margin: 15mm;
+            size: A4;
+          }
+          body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.6;
+            color: #000000;
+            background: #ffffff;
+            padding: 20px;
+            margin: 0;
+            font-size: 12pt;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+          }
+          h1 { font-size: 18pt; font-weight: bold; margin-bottom: 10pt; color: #000000; }
+          h2 { font-size: 16pt; font-weight: bold; margin-bottom: 8pt; color: #000000; }
+          h3 { font-size: 14pt; font-weight: bold; margin-bottom: 6pt; color: #000000; }
+          p { margin: 6pt 0; color: #000000; }
+          strong, b { font-weight: bold; color: #000000; }
+          em, i { font-style: italic; color: #000000; }
+          a { color: #0000EE; text-decoration: underline; }
+          ul, ol { margin: 6pt 0; padding-left: 20pt; color: #000000; }
+          li { margin: 3pt 0; color: #000000; }
+          hr { border: 1px solid #ccc; margin: 10pt 0; }
+          blockquote { 
+            border-left: 3px solid #ccc; 
+            padding-left: 10pt; 
+            margin: 10pt 0; 
+            font-style: italic;
+            color: #666666;
+          }
+          code { 
+            font-family: 'Courier New', monospace; 
+            background: #f5f5f5; 
+            padding: 2pt 4pt; 
+            color: #000000;
+          }
+          .contact-info {
+            text-align: center;
+            margin-bottom: 20pt;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10pt;
+          }
+        </style>
+      </head>
+      <body>
+        ${markdownToHTML(markdownContent)}
+      </body>
+      </html>
+    `;
+    
+    // Create blob and open print dialog
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    
+    const printWindow = window.open(url, '_blank', 'width=800,height=600');
+    
+    if (!printWindow) {
+      throw new Error("Popup blocked. Please allow popups for this site and try again.");
+    }
+    
+    printWindow.onload = () => {
+      setTimeout(() => {
+        printWindow.print();
+        // Don't close immediately, let user handle print dialog
+        setTimeout(() => {
+          printWindow.close();
+          URL.revokeObjectURL(url);
+        }, 1000);
+      }, 500);
     };
-
-    await html2pdf().set(opt).from(element).save();
+    
+    toast.success("PDF generation initiated. Use your browser's print dialog to save as PDF.");
+    
   } catch (error) {
-    console.error("PDF generation error:", error);
+    console.error("Primary PDF method failed:", error);
+    
+    // Method 2: Try html2pdf with simplified settings
+    try {
+      console.log("Trying html2pdf fallback...");
+      
+      const element = document.getElementById("resume-pdf");
+      if (!element) {
+        throw new Error("Resume element not found");
+      }
+      
+      // Create a simple text-only version
+      const textContent = element.innerText || previewContent || "";
+      const simpleHTML = `
+        <div style="font-family: Arial; color: black; background: white; padding: 20px; line-height: 1.6;">
+          <h1 style="color: black;">Resume</h1>
+          <div style="color: black; white-space: pre-wrap;">${textContent}</div>
+        </div>
+      `;
+      
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = simpleHTML;
+      tempDiv.style.position = 'absolute';
+      tempDiv.style.left = '-9999px';
+      document.body.appendChild(tempDiv);
+      
+      const html2pdf = (await import("html2pdf.js")).default;
+      const opt = {
+        margin: [10, 10],
+        filename: "resume.pdf",
+        image: { type: "jpeg", quality: 0.8 },
+        html2canvas: { 
+          scale: 1,
+          useCORS: true,
+          logging: false,
+          backgroundColor: '#ffffff'
+        },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+      };
+      
+      await html2pdf().set(opt).from(tempDiv).save();
+      document.body.removeChild(tempDiv);
+      toast.success("PDF generated successfully!");
+      
+    } catch (fallbackError) {
+      console.error("All PDF methods failed:", fallbackError);
+      
+      // Method 3: Direct download as HTML file (user can print to PDF)
+      try {
+        const htmlContent = `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <title>Resume</title>
+            <style>
+              body { font-family: Arial; line-height: 1.6; color: black; background: white; padding: 20px; }
+              h1, h2, h3 { color: black; }
+              p { color: black; }
+            </style>
+          </head>
+          <body>
+            ${markdownToHTML(previewContent || "")}
+          </body>
+          </html>
+        `;
+        
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'resume.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        toast.warning("PDF generation failed. Downloaded as HTML file. You can print it to PDF from your browser.");
+        
+      } catch (finalError) {
+        // Last resort: text file
+        const textContent = previewContent || "Resume content not available";
+        const blob = new Blob([textContent], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'resume.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        toast.error("All PDF methods failed. Downloaded as text file. Please check browser settings and try again.");
+      }
+    }
   } finally {
     setIsGenerating(false);
   }
+};
+
+// Simple markdown to HTML converter
+const markdownToHTML = (markdown) => {
+  if (!markdown) return "";
+  
+  return markdown
+    // Headers
+    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+    // Bold
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    // Italic
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    // Links
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+    // Line breaks
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/\n/g, '<br>')
+    // Lists (basic)
+    .replace(/^\* (.+)/gim, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
+    // Wrap in paragraphs
+    .replace(/^(?!<[h|u|l])/gim, '<p>')
+    .replace(/(?<!>)$/gim, '</p>')
+    // Contact info centering
+    .replace(/<div align="center">/g, '<div class="contact-info">')
+    .replace(/<\/div>/g, '</div>');
 };
 
 
@@ -428,12 +625,19 @@ export default function ResumeBuilder({ initialContent }) {
             />
           </div>
           <div className="hidden">
-            <div id="resume-pdf">
+            <div id="resume-pdf" style={{
+              fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+              backgroundColor: 'white',
+              color: '#1a1a1a',
+              padding: '20px',
+              lineHeight: '1.6'
+            }}>
               <MDEditor.Markdown
                 source={previewContent}
                 style={{
                   background: "white",
-                  color: "black",
+                  color: "#1a1a1a",
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
                 }}
               />
             </div>

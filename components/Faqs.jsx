@@ -22,7 +22,7 @@ export default function Faqs({ faqs }) {
             Frequently Asked Questions
           </h2>
           <p className="mt-4 text-gray-400">
-            Everything you need to know about Sensai
+            Everything you need to know about Ginnie-Verse
           </p>
         </motion.div>
 
@@ -37,32 +37,14 @@ export default function Faqs({ faqs }) {
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="
-                  rounded-xl
-                  border
-                  border-purple-500/20
-                  bg-[#0b0b1f]
-                  overflow-hidden
-                "
+                className="rounded-xl border border-purple-500/20 bg-[#0b0b1f] overflow-hidden"
               >
                 {/* Question */}
                 <button
                   onClick={() =>
                     setActiveIndex(isOpen ? null : index)
                   }
-                  className="
-                    w-full
-                    flex
-                    items-center
-                    justify-between
-                    px-6
-                    py-5
-                    text-left
-                    text-white
-                    font-medium
-                    hover:bg-purple-500/5
-                    transition
-                  "
+                  className="w-full flex items-center justify-between px-6 py-5 text-left text-white font-medium hover:bg-purple-500/5 transition"
                 >
                   <span>{faq.question}</span>
                   <ChevronDown

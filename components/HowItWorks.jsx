@@ -36,16 +36,7 @@ export default function HowItWorks({ steps }) {
               className="h-full"
             >
               <Card
-                className="
-                  h-full
-                  min-h-[260px]
-                  bg-transparent
-                  border-3xl border-gray-800
-                  hover:border-primary
-                  transition-all
-                  duration-300
-                  rounded-2xl
-                "
+                className="h-full min-h-[260px] bg-transparent border-3xl border-gray-800 hover:border-primary transition-all duration-300 rounded-2xl"
               >
                 <CardContent className="flex flex-col items-center text-center justify-center gap-4 p-6 h-full">
                   

@@ -25,5 +25,20 @@ export function slideInFromLeft(delay) {
       },
     };
   }
+
+  // Animation variants that are safe for SSR
+  export const safeVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { duration: 0.6 }
+    }
+  };
+
+  // Fade in animation for preventing hydration issues
+  export const fadeIn = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 }
+  };
   
   

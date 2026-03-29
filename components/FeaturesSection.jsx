@@ -35,16 +35,7 @@ export default function FeaturesSection({ features }) {
               className="h-full pb-10"
             >
               <Card
-                className="
-                  h-full
-                  min-h-[260px]
-                  bg-red
-                  border-3xl border-gray-800
-                  hover:border-primary
-                  transition-all
-                  duration-300
-                  rounded-2xl
-                "
+                className="h-full min-h-[260px] bg-red border-3xl border-gray-800 hover:border-primary transition-all duration-300 rounded-2xl"
               >
                 <CardContent className="flex flex-col items-center text-center justify-center gap-4 p-4 h-full">
                   

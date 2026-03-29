@@ -3,6 +3,7 @@
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { redirect } from "next/navigation";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
@@ -54,20 +55,59 @@ export async function getIndustryInsights() {
     },
   });
 
-  if (!user) throw new Error("User not found");
+  if (!user) {
+    // User doesn't exist in database, redirect to onboarding
+    console.log(`User ${userId} not found in database, redirecting to onboarding`);
+    return redirect("/onboarding");
+  }
 
   // ✅ If no insights exist, generate them dynamically
   if (!user.industryInsights) {
-    const insights = await generateAIInsights(user.industry);
-
-    const industryInsight = await db.industryInsights.create({
-      data: {
-        industry: user.industry,
-        ...insights,
-        nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
-      },
+    // Check if user has an industry, if not use a default
+    let userIndustry = user.industry;
+    
+    if (!userIndustry) {
+      console.warn(`User ${userId} has no industry set, using default "Technology"`);
+      userIndustry = "Technology";
+    }
+    
+    console.log(`Generating insights for user ${userId}, industry: ${userIndustry}`);
+    
+    // Check if insights already exist for this industry
+    const existingInsights = await db.industryInsights.findUnique({
+      where: { industry: userIndustry }
     });
 
+    let industryInsight;
+    
+    if (existingInsights) {
+      // Use existing insights
+      industryInsight = existingInsights;
+      console.log(`Using existing industry insights for ${userIndustry}`);
+    } else {
+      // Generate new insights
+      const insights = await generateAIInsights(userIndustry);
+      
+      industryInsight = await db.industryInsights.create({
+        data: {
+          industry: userIndustry,
+          ...insights,
+          nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
+        },
+      });
+
+      console.log(`Created new industry insights for ${userIndustry}`);
+    }
+
+    // Now update user with industry (only if it was null)
+    if (!user.industry) {
+      await db.user.update({
+        where: { clerkUserId: userId },
+        data: { industry: userIndustry }
+      });
+      console.log(`Updated user ${userId} with industry: ${userIndustry}`);
+    }
+    
     return industryInsight;
   }
 
